@@ -15,6 +15,7 @@ const AWS = require("aws-sdk");
     }
     const prefix = core.getInput("prefix");
     const Path = core.getInput("path", { required: true });
+    const ShouldIncludePath = core.getInput("shouldIncludePath");
     const WithDecryption = core.getInput("decrypt") === "true";
     const Recursive = core.getInput("recursive") === "true";
 
@@ -28,6 +29,9 @@ const AWS = require("aws-sdk");
     } while (NextToken);
 
     Parameters.forEach(({ Name, Value, Type }) => {
+      if (ShouldIncludePath === "false") {
+        Name = Name.replace(Path, "");
+      }
       const variable = prefix + Name.toUpperCase().replace(/^\//, "").replace(/\//g, "_");
       // If we are decrypting SecureStrings, make sure the decrypted value isn't getting printed in the logs
       // (see https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#masking-a-value-in-log)

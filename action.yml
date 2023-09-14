@@ -7,6 +7,9 @@ inputs:
   path:
     description: "The SSM Parameter Store path"
     required: true
+  shouldIncludePath:
+    description: "Whether to include the full path as it is in SSM in the env var names"
+    default: true
   decrypt:
     description: "Whether to decrypt any secure values"
     required: false
